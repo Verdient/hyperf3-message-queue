@@ -1,0 +1,34 @@
+{
+    "name": "verdient/hyperf3-message-queue",
+    "type": "library",
+    "require": {
+        "hyperf/config": "^3.1",
+        "hyperf/contract": "^3.1",
+        "hyperf/di": "^3.1",
+        "hyperf/event": "^3.1",
+        "hyperf/framework": "^3.1",
+        "hyperf/pool": "^3.1",
+        "hyperf/redis": "^3.1",
+        "hyperf/server": "^3.1",
+        "hyperf/stringable": "^3.1",
+        "hyperf/support": "^3.1",
+        "php-amqplib/php-amqplib": "^3.7",
+        "psr/container": "^2.0",
+        "psr/log": "^3.0",
+        "verdient/hyperf3-di": "^2.0",
+        "verdient/hyperf3-logger": "^2.0",
+        "verdient/hyperf3-task": "^2.0",
+        "verdient/message-queue": "^0.0",
+        "monolog/monolog": "^3.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Verdient\\Hyperf3\\MessageQueue\\": "src"
+        }
+    },
+    "extra": {
+        "hyperf": {
+            "config": "Verdient\\Hyperf3\\MessageQueue\\ConfigProvider"
+        }
+    }
+}
