@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Verdient\Hyperf3\MessageQueue;
 
-use Hyperf\Redis\RedisProxy;
 use Override;
-use Redis;
 use RuntimeException;
 use Throwable;
 use Verdient\MessageQueue\AdapterInterface;
@@ -22,11 +20,19 @@ use function Hyperf\Config\config;
 class RedisAdapter implements AdapterInterface
 {
     /**
+     * Redis对象
+     *
+     * @author Verdient。
+     */
+    protected RedisConnection $redisConnection;
+
+    /**
      * @param ?string $pool 连接池名称
      *
      * @author Verdient。
      */
-    public function __construct(protected ?string $pool = null) {
+    public function __construct(protected ?string $pool = null)
+    {
         if ($pool === null) {
             $pools = array_keys(config('redis', []));
 
@@ -40,16 +46,8 @@ class RedisAdapter implements AdapterInterface
                 $this->pool = $pools[0];
             }
         }
-    }
 
-    /**
-     * 获取连接对象
-     *
-     * @author Verdient。
-     */
-    protected function connection(): Redis|RedisProxy
-    {
-        return RedisConnectionManager::get($this->pool);
+        $this->redisConnection = new RedisConnection($this->pool);
     }
 
     /**
@@ -79,7 +77,7 @@ class RedisAdapter implements AdapterInterface
     #[Override]
     public function push(MessageInterface $message): bool
     {
-        return $this->connection()->lpush($this->getKey($message->queue()), serialize($message)) > 0;
+        return $this->redisConnection->push($this->getKey($message->queue()), serialize($message));
     }
 
     /**
@@ -88,7 +86,7 @@ class RedisAdapter implements AdapterInterface
     #[Override]
     public function pop(string $queue): ?MessageInterface
     {
-        if ($message = $this->connection()->rpop($this->getKey($queue))) {
+        if ($message = $this->redisConnection->pop($this->getKey($queue))) {
             return unserialize($message);
         }
 
