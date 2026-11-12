@@ -32,7 +32,9 @@ class ConfigProvider
                 ],
             ],
             'logger' => [
-                MessageInterface::class => fn($name) => Utils::generateLoggerConfig($name)
+                'channels' => [
+                    MessageInterface::class => fn($name) => Utils::generateLoggerConfig($name)
+                ],
             ]
         ];
     }
